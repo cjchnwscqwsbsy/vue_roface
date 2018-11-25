@@ -1,5 +1,9 @@
 <template>
-
+    <div id="app">
+        <transition>
+            <router-view></router-view>
+        </transition>
+    </div>
 </template>
 
 <script>
@@ -8,6 +12,6 @@
     }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 
 </style>

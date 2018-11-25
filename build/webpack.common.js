@@ -1,17 +1,48 @@
+"use strict";
+
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const prodConfg = require('../config').build;
+
+//拼接路径
+function resolve(track){
+    return path.join(__dirname,'..',track);
+}
+
+//资源路径
+function assetsPath(_path){
+    return path.join(prodConfg.staticPath,_path);
+}
+
 module.exports = {
-  entry: {
-    app: './src/main.js'
-  },
-plugins: [
-    new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin({
-        title: 'Production'
-})
-],
-output: {
-    filename: '[name].bundle.js',path: path.resolve(__dirname, 'dist')
-  }
+    entry: path.resolve(__dirname,'../src/main.js'),
+    //配置模块如何被解析
+    resolve: {
+        //自动解析文件扩展名
+        extensions: ['.js','vue','.json']
+    },
+    //配置别名映射($表示精准匹配)
+    alias:{
+        vue$:'vue/dist/vue.esm.js',
+        '@':resolve('src'),
+        utils:resolve('src/utils'),
+        component:resolve('src/component'),
+        public:resolve('public')
+    },
+    module:{
+        rules: [
+            {
+                test:/\.js$/,
+                use:{loader:'babel-loader'},
+                include:resolve('src')
+            },
+            {
+                test:/\.(png|jpe?g|git|svg)(\?.*)/,
+                loader:'url-loader',
+                options:{
+                    limit:8192,
+                    name:assetsPath('img/[name].[hash:8].[ext]')
+                }
+            }
+        ]
+    }
 };
