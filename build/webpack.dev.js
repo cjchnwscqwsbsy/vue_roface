@@ -1,6 +1,5 @@
 "use strict";
 
-const path = require("path");
 const webpack = require("webpack");
 //引入webpack开发环境配置参数
 const devConfig = require("../config").dev;
@@ -12,12 +11,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 //发送系统通知的一个node模块！
 const notifier = require("node-notifier");
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const devConf = merge(baseConf,{
     output:{
         filename:'[name].js',
         publicPath:devConfig.publicPath
     },
+    mode:'development',
     devtool:devConfig.devtoolType,
     //启动一个express服务器进行本地开发
     devServer:{
@@ -45,7 +46,7 @@ const devConf = merge(baseConf,{
             {
                 test:/\.vue$/,
                 loader:'vue-loader',
-                option:devConfig.vueloaderConf
+                options:devConfig.vueloaderConf
             },
             //使用vue-style-loader!css-loader!postcss-loader处理以css结尾的文件！
             {
@@ -93,6 +94,7 @@ const devConf = merge(baseConf,{
         ]
     },
     plugins:[
+        new VueLoaderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(),    //显示模块相对路径
         //编译出错时,该插件可跳过输出,确保输出资源不会包含错误!

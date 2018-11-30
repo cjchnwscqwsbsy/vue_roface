@@ -18,15 +18,14 @@ module.exports = {
     //配置模块如何被解析
     resolve: {
         //自动解析文件扩展名
-        extensions: ['.js','vue','.json']
-    },
-    //配置别名映射($表示精准匹配)
-    alias:{
-        vue$:'vue/dist/vue.esm.js',
-        '@':resolve('src'),
-        utils:resolve('src/utils'),
-        component:resolve('src/component'),
-        public:resolve('public')
+        extensions: ['.js','.vue','.json'],
+        alias:{
+            vue$:'vue/dist/vue.js',
+            utils:resolve('src/utils'),
+            component:resolve('src/component'),
+            public:resolve('public'),
+            page:resolve('src/page')
+        }
     },
     module:{
         rules: [

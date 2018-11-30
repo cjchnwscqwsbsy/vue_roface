@@ -30,6 +30,7 @@ const prodConf = merge(baseConf,{
         //用于打包require.ensure(代码分割)方法中引入的模块
         chunkFilename: assetsPath("js/[name].[chunkhash].js")
     },
+    mode:'production',
     devtool:prodConfig.devtoolType,
     //压缩js
     optimization:{
