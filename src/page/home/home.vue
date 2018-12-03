@@ -1,5 +1,5 @@
 <template>
-    <div id="home">hello,world!</div>
+    <div id="home" class="rkxie">hello,world!</div>
 </template>
 
 <script>
@@ -8,6 +8,6 @@
     }
 </script>
 
-<style>
-
+<style lang="less">
+@import "./style/index";
 </style>

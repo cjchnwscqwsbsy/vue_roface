@@ -13,6 +13,7 @@ const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 //发送系统通知的一个node模块！
 const notifier = require("node-notifier");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+// const HotModuleReplacementPlugin = require();
 
 const devConf = merge(baseConf,{
     output:{
@@ -101,9 +102,9 @@ const devConf = merge(baseConf,{
         //编译出错时,该插件可跳过输出,确保输出资源不会包含错误!
         // new webpack.NoEmitOnErrorsPlugin(),
         new HtmlWebpackPlugin({
-            title:'Sound of Silence',
+            title:'xrk',
             filename:'index.html',
-            template: 'index.html',
+            template: path.resolve(__dirname,'../index.html'),
             inject: true      //js资源插入位置，true:body元素底部
         }),
         //编译提示插件
