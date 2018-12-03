@@ -36,6 +36,9 @@ const prodConf = merge(baseConf,{
     optimization:{
         minimizer:[
             new UglifyJsPlugin()
+        ],
+        splitChunks:[
+
         ]
     },
     module:{
@@ -68,13 +71,6 @@ const prodConf = merge(baseConf,{
         new ExtractTextPlugin({
             filename: assetsPath("css/[name].[contenthash].css"),
             allChunks: false
-        }),
-        //压缩js
-        new webpack.optimize.UglifyJsPlugin({
-            parallel: true,
-            compress: {
-                warnings: false
-            }
         }),
         //压缩css
         new OptimizeCSSPlugin(),

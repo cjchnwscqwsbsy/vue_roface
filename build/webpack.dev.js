@@ -13,7 +13,7 @@ const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 //发送系统通知的一个node模块！
 const notifier = require("node-notifier");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-// const HotModuleReplacementPlugin = require();
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const devConf = merge(baseConf,{
     output:{
