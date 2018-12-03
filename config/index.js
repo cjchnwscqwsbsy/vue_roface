@@ -27,10 +27,16 @@ const devVueLoaderConf = Object.assign({},baseVueLoaderConf,{
 });
 //vue-loader生产环境配置
 const buildVueLoaderConf = Object.assign({},baseVueLoaderConf,{
-    loaders: ExtractTextPlugin.extract({
-        use:['css-loader','postcss-loader','less-loader'],
-        fallback:'vue-style-loader'
-    }),
+    loaders: {
+        css: ExtractTextPlugin.extract({
+            use: ['css-loader', 'postcss-loader'],
+            fallback: 'vue-style-loader'
+        }),
+        less: ExtractTextPlugin.extract({
+            use: ['css-loader', 'postcss-loader', 'less-loader'],
+            fallback: 'vue-style-loader'
+        })
+    },
     cssSourceMap: false
 });
 //开发、生产环境配置参数

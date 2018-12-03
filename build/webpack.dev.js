@@ -1,6 +1,7 @@
 "use strict";
 
 const webpack = require("webpack");
+const path = require('path');
 //引入webpack开发环境配置参数
 const devConfig = require("../config").dev;
 //引入webpack基本配置

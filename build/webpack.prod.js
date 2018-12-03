@@ -62,12 +62,19 @@ const prodConf = merge(baseConf,{
         ]
     },
     plugins:[
-        //每个chunk头部添加hey,xc-cli!
-        new webpack.BannerPlugin("hey,xc-cli"),
+        //每个chunk头部添加xrk!
+        new webpack.BannerPlugin("xrk"),
         //分离入口引用的css,不内嵌到js bundle中!
         new ExtractTextPlugin({
             filename: assetsPath("css/[name].[contenthash].css"),
             allChunks: false
+        }),
+        //压缩js
+        new webpack.optimize.UglifyJsPlugin({
+            parallel: true,
+            compress: {
+                warnings: false
+            }
         }),
         //压缩css
         new OptimizeCSSPlugin(),
