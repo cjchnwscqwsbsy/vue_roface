@@ -13,7 +13,8 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCSSPlugin = require("optimize-css-assets-webpack-plugin");
 //一个拷贝文件的webpack插件！
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 //资源路径
 function assetsPath(_path) {
@@ -34,12 +35,30 @@ const prodConf = merge(baseConf,{
     devtool:prodConfig.devtoolType,
     //压缩js
     optimization:{
-        minimizer:[
-            new UglifyJsPlugin()
-        ],
-        splitChunks:[
-
-        ]
+        splitChunks:{
+            cacheGroups: {
+                vendor:{//node_modules内的依赖库
+                    chunks:"initial",
+                    test: /node_modules/,
+                    name:"vendor",
+                    minChunks: 1, //被不同entry引用次数(import),1次的话没必要提取
+                    maxInitialRequests: 5,
+                    minSize: 0,
+                    priority:100,
+                    // enforce: true?
+                },
+                app: {// ‘src/js’ 下的js文件
+                    chunks:"initial",
+                    name: "app", //生成文件名，依据output规则
+                    minChunks: 2,
+                    minSize: 0,
+                    priority:2
+                }
+            }
+        },
+        runtimeChunk:{
+            name:'manifest',
+        }
     },
     module:{
         rules:[
@@ -65,11 +84,13 @@ const prodConf = merge(baseConf,{
         ]
     },
     plugins:[
+        new CleanWebpackPlugin([path.resolve(__dirname, "../public")]),
+        new VueLoaderPlugin(),
         //每个chunk头部添加xrk!
         new webpack.BannerPlugin("xrk"),
         //分离入口引用的css,不内嵌到js bundle中!
         new ExtractTextPlugin({
-            filename: assetsPath("css/[name].[contenthash].css"),
+            filename: assetsPath("css/[name].[hash].css"),
             allChunks: false
         }),
         //压缩css
@@ -78,37 +99,6 @@ const prodConf = merge(baseConf,{
         new webpack.HashedModuleIdsPlugin(),
         //作用域提升,提升代码在浏览器执行速度
         new webpack.optimize.ModuleConcatenationPlugin(),
-
-        //抽离公共模块,合成一个chunk,在最开始加载一次,便缓存使用,用于提升速度!
-
-        // 1. 第三方库chunk
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            minChunks: function(module) {
-                //在node_modules的js文件!
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(path.join(__dirname, "../node_modules")) === 0
-                );
-            }
-        }),
-
-        // 2. 缓存chunk
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "manifest",
-            minChunks: Infinity
-        }),
-
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "app",
-            children: true,
-            // (选择所有被选 chunks 的子 chunks)
-            async: true,
-            // (创建一个异步 公共chunk)
-            minChunks: 3
-            // (在提取之前需要至少三个子 chunk 共享这个模块)
-        }),
 
         //将整个文件复制到构建输出指定目录下
         new CopyWebpackPlugin([

@@ -13,7 +13,6 @@ const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 //发送系统通知的一个node模块！
 const notifier = require("node-notifier");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const devConf = merge(baseConf,{
     output:{
@@ -96,11 +95,12 @@ const devConf = merge(baseConf,{
         ]
     },
     plugins:[
+        //以下变量不必再import了
+        new webpack.ProvidePlugin({
+            Vue:'vue',
+        }),
         new VueLoaderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin(),    //显示模块相对路径
-        //编译出错时,该插件可跳过输出,确保输出资源不会包含错误!
-        // new webpack.NoEmitOnErrorsPlugin(),
         new HtmlWebpackPlugin({
             title:'xrk',
             filename:'index.html',
